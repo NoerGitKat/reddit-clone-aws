@@ -1,0 +1,29 @@
+type Post
+  @model
+  @auth(
+    rules: [
+      { allow: owner, operations: [read, create, update, delete] }
+      # Signed In and Guests Users can only read
+      { allow: private, operations: [read] }
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  title: String!
+  comments: [Comment] @hasMany
+}
+
+type Comment
+  @model
+  @auth(
+    rules: [
+      { allow: owner, operations: [read, create, update, delete] }
+      # Signed In and Guests Users can only read
+      { allow: private, operations: [read] }
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  post: Post @belongsTo
+  content: String!
+}
