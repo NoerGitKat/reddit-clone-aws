@@ -19,7 +19,7 @@ const Register: React.FunctionComponent<IRegisterProps> = (props) => {
   const [signupError, setSignupError] = useState("");
   const [showConfirmationCode, setShowConfirmationCode] = useState(false);
   const [hasResentCode, setHasResentCode] = useState(false);
-  const { user, setUser } = useAuth();
+  const { setUser } = useAuth();
   const { push } = useRouter();
   const {
     register,
@@ -68,8 +68,6 @@ const Register: React.FunctionComponent<IRegisterProps> = (props) => {
       console.log("Error resending code: ", err);
     }
   }
-
-  console.log("getvalues", getValues());
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
