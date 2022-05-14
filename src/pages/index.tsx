@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Post } from "../API";
 import { PostPreview } from "../components";
-import { useAuth } from "../context/AuthContex";
+import { useAuth } from "../context/AuthContext";
 import { fetchPosts } from "../requests";
 
 const Home: NextPage = () => {
@@ -22,7 +22,7 @@ const Home: NextPage = () => {
     }
   }, [data]);
 
-  console.log("error", error);
+  console.log("posts", posts);
 
   return (
     <main>
@@ -36,7 +36,10 @@ const Home: NextPage = () => {
                 key={post.id}
                 owner={post.owner || ""}
                 title={post.title}
+                contents={post.contents}
                 createdAt={post.createdAt}
+                upvotes={post.upvotes}
+                downvotes={post.downvotes}
               />
             ))
           ) : (

@@ -3,7 +3,7 @@ import { Auth } from "aws-amplify";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useAuth } from "../../context/AuthContex";
+import { useAuth } from "../../context/AuthContext";
 
 interface ILoginProps {}
 
@@ -12,7 +12,7 @@ interface IFormInput {
   password: string;
 }
 
-const Login: React.FunctionComponent<ILoginProps> = (props) => {
+const Login: React.FC<ILoginProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loginError, setLoginError] = useState("");
   const { user, setUser } = useAuth();
@@ -35,67 +35,72 @@ const Login: React.FunctionComponent<ILoginProps> = (props) => {
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container direction="column" alignItems="center" spacing={1}>
-        <Grid item>
-          <TextField
-            id="email"
-            variant="outlined"
-            label="Email"
-            type="email"
-            error={!!errors.email}
-            helperText={errors.email ? errors.email.message : ""}
-            {...register("email", {
-              required: {
-                value: true,
-                message: "Please enter an email address",
-              },
-            })}
-          />
-        </Grid>
-        <Grid item>
-          <TextField
-            id="password"
-            variant="outlined"
-            label="Password"
-            type="password"
-            error={!!errors.password}
-            helperText={errors.password ? errors.password.message : ""}
-            {...register("password", {
-              required: {
-                value: true,
-                message: "Please enter a password",
-              },
-              validate: (value) => {
-                return (
-                  [/[a-z]/, /[A-Z]/, /[0-9]/, /[#?!@_$%^&*-]/].every(
-                    (pattern) => pattern.test(value),
-                  ) ||
-                  "Password should contain at least 1 capital letter, 1 special character and 1 digit"
-                );
-              },
-            })}
-          />
-        </Grid>
+  if (user) {
+    push("/");
+    return;
+  } else {
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid container direction="column" alignItems="center" spacing={1}>
+          <Grid item>
+            <TextField
+              id="email"
+              variant="outlined"
+              label="Email"
+              type="email"
+              error={!!errors.email}
+              helperText={errors.email ? errors.email.message : ""}
+              {...register("email", {
+                required: {
+                  value: true,
+                  message: "Please enter an email address",
+                },
+              })}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              id="password"
+              variant="outlined"
+              label="Password"
+              type="password"
+              error={!!errors.password}
+              helperText={errors.password ? errors.password.message : ""}
+              {...register("password", {
+                required: {
+                  value: true,
+                  message: "Please enter a password",
+                },
+                validate: (value) => {
+                  return (
+                    [/[a-z]/, /[A-Z]/, /[0-9]/, /[#?!@_$%^&*-]/].every(
+                      (pattern) => pattern.test(value),
+                    ) ||
+                    "Password should contain at least 1 capital letter, 1 special character and 1 digit"
+                  );
+                },
+              })}
+            />
+          </Grid>
 
-        <Grid item>
-          <Button variant="contained" type="submit">
-            Login
-          </Button>
+          <Grid item>
+            <Button variant="contained" type="submit">
+              Login
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-      <Snackbar
-        open={isOpen}
-        autoHideDuration={2000}
-        onClose={() => setIsOpen(false)}
-      >
-        <Alert severity="error" elevation={6} variant="filled">
-          {loginError}
-        </Alert>
-      </Snackbar>
-    </form>
-  );
+        <Snackbar
+          open={isOpen}
+          autoHideDuration={2000}
+          onClose={() => setIsOpen(false)}
+        >
+          <Alert severity="error" elevation={6} variant="filled">
+            {loginError}
+          </Alert>
+        </Snackbar>
+      </form>
+    );
+  }
 };
 
 export default Login;

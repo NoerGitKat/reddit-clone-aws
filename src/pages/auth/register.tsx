@@ -3,7 +3,7 @@ import { Auth } from "aws-amplify";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useAuth } from "../../context/AuthContex";
+import { useAuth } from "../../context/AuthContext";
 
 interface IRegisterProps {}
 

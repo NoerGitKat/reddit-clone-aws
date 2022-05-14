@@ -7,7 +7,7 @@ import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import awsconfig from "../aws-exports";
-import { AuthContext } from "../context/AuthContex";
+import { AuthContext } from "../context/AuthContext";
 import createEmotionCache from "../createEmotionCache";
 import theme from "../theme";
 
