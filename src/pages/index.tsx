@@ -1,4 +1,4 @@
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Container } from "@mui/material";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -11,7 +11,7 @@ const Home: NextPage = () => {
   const { user } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
 
-  const { data, isLoading } = useQuery(["posts"], fetchPosts);
+  const { data, isLoading, error } = useQuery(["posts"], fetchPosts);
 
   useEffect(() => {
     const listPosts = data?.data.listPosts?.items as Post[];
@@ -22,12 +22,14 @@ const Home: NextPage = () => {
     }
   }, [data]);
 
+  console.log("error", error);
+
   return (
     <main>
       {isLoading ? (
         <CircularProgress />
       ) : (
-        <main>
+        <Container maxWidth="md">
           {posts.length > 0 ? (
             posts.map((post) => (
               <PostPreview
@@ -40,7 +42,7 @@ const Home: NextPage = () => {
           ) : (
             <p>No posts yet!</p>
           )}
-        </main>
+        </Container>
       )}
     </main>
   );

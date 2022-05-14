@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "redditcloneaws12968a35_identitypool_12968a35",
+    "identityPoolName": "redditcloneawsd377939b_identitypool_d377939b",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "reddit12968a35",
-    "userPoolName": "redditcloneaws12968a35_userpool_12968a35",
+    "resourceNameTruncated": "redditd377939b",
+    "userPoolName": "redditcloneawsd377939b_userpool_d377939b",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,18 +31,36 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "reddit12968a35_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "redditd377939b_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "12968a35",
-    "resourceName": "redditcloneaws12968a35",
+    "sharedId": "d377939b",
+    "resourceName": "redditcloneawsd377939b",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
-    "usernameAttributes": [
-      "email"
+    "triggers": {},
+    "userPoolGroupList": [
+      "redditcloneusers"
     ],
-    "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true
+    "useEnabledMfas": true,
+    "authRoleArn": {
+      "Fn::GetAtt": [
+        "AuthRole",
+        "Arn"
+      ]
+    },
+    "unauthRoleArn": {
+      "Fn::GetAtt": [
+        "UnauthRole",
+        "Arn"
+      ]
+    },
+    "breakCircularDependency": true,
+    "dependsOn": [],
+    "parentStack": {
+      "Ref": "AWS::StackId"
+    },
+    "permissions": []
   }
 }

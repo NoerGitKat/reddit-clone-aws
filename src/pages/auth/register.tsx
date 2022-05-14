@@ -36,16 +36,16 @@ const Register: React.FunctionComponent<IRegisterProps> = (props) => {
   }) => {
     try {
       if (showConfirmationCode) {
-        await Auth.confirmSignUp(email, code);
-        const signedInUser = await Auth.signIn(email, password);
+        await Auth.confirmSignUp(username, code);
+        const signedInUser = await Auth.signIn(username, password);
         setUser(signedInUser);
         push("/");
       } else {
         const { user: newUser } = await Auth.signUp({
-          username: email,
+          username,
           password,
           attributes: {
-            "custom:username": username,
+            email,
           },
         });
 
@@ -161,7 +161,7 @@ const Register: React.FunctionComponent<IRegisterProps> = (props) => {
                 href="#"
                 role="button"
                 tabIndex={0}
-                onClick={() => resendConfirmationCode(getValues("email"))}
+                onClick={() => resendConfirmationCode(getValues("username"))}
               >
                 Resend confirmation code
               </a>

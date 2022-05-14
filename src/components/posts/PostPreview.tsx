@@ -14,10 +14,7 @@ export interface IPostPreviewProps {
 
 const PostPreview = ({ title, owner, createdAt }: IPostPreviewProps) => {
   return (
-    <Paper
-      elevation={3}
-      sx={{ maxWidth: "75%", margin: "0 auto", padding: "1rem" }}
-    >
+    <Paper elevation={3} sx={{ margin: "1rem 0", padding: "1rem" }}>
       <Grid container direction="row" spacing={3}>
         <Grid item alignItems="center">
           <Grid item>
