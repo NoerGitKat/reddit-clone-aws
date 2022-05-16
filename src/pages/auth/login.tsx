@@ -1,4 +1,13 @@
-import { Alert, Button, Grid, Snackbar, TextField } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Alert,
+  Button,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import { Auth } from "aws-amplify";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -8,13 +17,14 @@ import { useAuth } from "../../context/AuthContext";
 interface ILoginProps {}
 
 interface IFormInput {
-  email: string;
+  username: string;
   password: string;
 }
 
 const Login: React.FC<ILoginProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const [isShowingPassword, setIsShowingPassword] = useState(false);
   const { user, setUser } = useAuth();
   const { push } = useRouter();
   const {
@@ -23,9 +33,12 @@ const Login: React.FC<ILoginProps> = (props) => {
     handleSubmit,
   } = useForm<IFormInput>();
 
-  const onSubmit: SubmitHandler<IFormInput> = async ({ password, email }) => {
+  const onSubmit: SubmitHandler<IFormInput> = async ({
+    password,
+    username,
+  }) => {
     try {
-      const signedInUser = await Auth.signIn(email, password);
+      const signedInUser = await Auth.signIn(username, password);
       setUser(signedInUser);
       push("/");
     } catch (error: any) {
@@ -44,16 +57,16 @@ const Login: React.FC<ILoginProps> = (props) => {
         <Grid container direction="column" alignItems="center" spacing={1}>
           <Grid item>
             <TextField
-              id="email"
+              id="username"
               variant="outlined"
-              label="Email"
-              type="email"
-              error={!!errors.email}
-              helperText={errors.email ? errors.email.message : ""}
-              {...register("email", {
+              label="Username"
+              type="username"
+              error={!!errors.username}
+              helperText={errors.username ? errors.username.message : ""}
+              {...register("username", {
                 required: {
                   value: true,
-                  message: "Please enter an email address",
+                  message: "Please enter your username",
                 },
               })}
             />
@@ -61,9 +74,24 @@ const Login: React.FC<ILoginProps> = (props) => {
           <Grid item>
             <TextField
               id="password"
-              variant="outlined"
               label="Password"
-              type="password"
+              variant="outlined"
+              type={isShowingPassword ? "text" : "password"}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() =>
+                        setIsShowingPassword((prevState) => !prevState)
+                      }
+                      edge="end"
+                    >
+                      {isShowingPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
               error={!!errors.password}
               helperText={errors.password ? errors.password.message : ""}
               {...register("password", {

@@ -1,7 +1,8 @@
-import { CircularProgress, Container } from "@mui/material";
+import { Button, CircularProgress, Container } from "@mui/material";
+import { Auth } from "aws-amplify";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { Post } from "../API";
 import { PostPreview } from "../components";
 import { useAuth } from "../context/AuthContext";
@@ -11,6 +12,7 @@ const Home: NextPage = () => {
   const { user } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
 
+  const queryClient = useQueryClient();
   const { data, isLoading, error } = useQuery(["posts"], fetchPosts);
 
   useEffect(() => {
@@ -22,7 +24,14 @@ const Home: NextPage = () => {
     }
   }, [data]);
 
-  console.log("posts", posts);
+  async function signOut() {
+    try {
+      await Auth.signOut({ global: true });
+      queryClient.resetQueries("posts", { exact: true });
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  }
 
   return (
     <main>
@@ -30,13 +39,25 @@ const Home: NextPage = () => {
         <CircularProgress />
       ) : (
         <Container maxWidth="md">
+          {user && (
+            <Button
+              variant="contained"
+              color="primary"
+              type="button"
+              onClick={signOut}
+            >
+              Sign out!
+            </Button>
+          )}
           {posts.length > 0 ? (
             posts.map((post) => (
               <PostPreview
                 key={post.id}
+                id={post.id}
                 owner={post.owner || ""}
                 title={post.title}
                 contents={post.contents}
+                image={post.image}
                 createdAt={post.createdAt}
                 upvotes={post.upvotes}
                 downvotes={post.downvotes}

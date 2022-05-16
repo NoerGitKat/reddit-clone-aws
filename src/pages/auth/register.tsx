@@ -1,4 +1,13 @@
-import { Alert, Button, Grid, Snackbar, TextField } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Alert,
+  Button,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import { Auth } from "aws-amplify";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -17,6 +26,7 @@ interface IFormInput {
 const Register: React.FunctionComponent<IRegisterProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [signupError, setSignupError] = useState("");
+  const [isShowingPassword, setIsShowingPassword] = useState(false);
   const [showConfirmationCode, setShowConfirmationCode] = useState(false);
   const [hasResentCode, setHasResentCode] = useState(false);
   const { setUser } = useAuth();
@@ -118,7 +128,22 @@ const Register: React.FunctionComponent<IRegisterProps> = (props) => {
                 id="password"
                 variant="outlined"
                 label="Password"
-                type="password"
+                type={isShowingPassword ? "text" : "password"}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() =>
+                          setIsShowingPassword((prevState) => !prevState)
+                        }
+                        edge="end"
+                      >
+                        {isShowingPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
                 error={!!errors.password}
                 helperText={errors.password ? errors.password.message : ""}
                 {...register("password", {
